@@ -1,0 +1,166 @@
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Search, ArrowRight, Percent } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import FoodCard from "@/components/FoodCard";
+import { menuItems, categories } from "@/data/menuData";
+import heroFood from "@/assets/hero-food.jpg";
+
+const Index = () => {
+  const featured = menuItems.filter((i) => i.featured);
+  const popular = menuItems.filter((i) => i.popular);
+
+  return (
+    <main>
+      {/* Hero */}
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={heroFood} alt="Nawab Dine feast" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
+        </div>
+
+        <div className="container relative z-10 py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-2xl"
+          >
+            <span className="inline-block text-primary font-medium text-sm tracking-widest uppercase mb-4">
+              Premium Bangladeshi Cuisine
+            </span>
+            <h1 className="font-heading text-5xl md:text-7xl font-bold leading-tight mb-6">
+              <span className="text-gradient-gold">Royal Taste</span>
+              <br />
+              Delivered to Your Door
+            </h1>
+            <p className="text-foreground/70 text-lg md:text-xl mb-8 max-w-lg">
+              Experience the finest biriyani, kacchi, and royal cuisine from Nawab Dine – crafted with authentic spices and love.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <Button variant="gold" size="xl" asChild>
+                <Link to="/menu" className="gap-2">
+                  Order Now <ArrowRight className="w-5 h-5" />
+                </Link>
+              </Button>
+              <Button variant="gold-outline" size="xl" asChild>
+                <Link to="/menu">Explore Menu</Link>
+              </Button>
+            </div>
+
+            {/* Search */}
+            <div className="relative max-w-md">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search for biriyani, pizza, burger..."
+                className="w-full h-12 pl-12 pr-4 rounded-lg bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 font-body"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Special Offer Banner */}
+      <section className="bg-gradient-gold py-3">
+        <div className="container flex items-center justify-center gap-3 text-primary-foreground font-medium">
+          <Percent className="w-5 h-5" />
+          <span className="text-sm md:text-base">🎉 Special Offer: 20% OFF on your first order! Use code <strong>NAWAB20</strong></span>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="container py-16 md:py-24">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-3">
+            Explore Our <span className="text-gradient-gold">Categories</span>
+          </h2>
+          <p className="text-muted-foreground max-w-md mx-auto">Choose from our royal selection of authentic dishes</p>
+        </motion.div>
+
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-11 gap-3">
+          {categories.map((cat, i) => (
+            <motion.div
+              key={cat.id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+            >
+              <Link
+                to={`/menu?category=${cat.id}`}
+                className="group flex flex-col items-center gap-3 p-4 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-gold transition-all duration-300"
+              >
+                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary transition-colors">
+                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+                </div>
+                <span className="text-sm font-medium text-center">{cat.name}</span>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured */}
+      <section className="bg-secondary/20 py-16 md:py-24">
+        <div className="container">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold mb-2">
+                <span className="text-gradient-gold">Featured</span> Dishes
+              </h2>
+              <p className="text-muted-foreground">Chef's special picks for you</p>
+            </div>
+            <Button variant="gold-outline" asChild className="hidden sm:inline-flex">
+              <Link to="/menu">View All</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featured.slice(0, 4).map((item, i) => (
+              <FoodCard key={item.id} item={item} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Popular */}
+      <section className="container py-16 md:py-24">
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <h2 className="font-heading text-3xl md:text-4xl font-bold mb-2">
+              Most <span className="text-gradient-gold">Popular</span>
+            </h2>
+            <p className="text-muted-foreground">Loved by our customers</p>
+          </div>
+          <Button variant="gold-outline" asChild className="hidden sm:inline-flex">
+            <Link to="/menu">See All</Link>
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {popular.slice(0, 8).map((item, i) => (
+            <FoodCard key={item.id} item={item} index={i} />
+          ))}
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="container pb-16 md:pb-24">
+        <div className="bg-card rounded-2xl border border-border p-8 md:p-12 text-center glow-gold">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold mb-3">Stay Updated</h2>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">Get exclusive offers and menu updates delivered to your inbox</p>
+          <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="flex-1 h-12 px-4 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 font-body"
+            />
+            <Button variant="gold" size="lg">Subscribe</Button>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+};
+
+export default Index;
